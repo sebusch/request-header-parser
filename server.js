@@ -4,7 +4,12 @@ var port = process.env.PORT || 8080;
 
 app.use( function( req, res, next ) {
   var headerData = {};
-  headerData.ipAddress = req.ip;
+  var ip = req.ip;
+  //handle ipv4 prefix:
+  if (ip.substr(0, 7) == "::ffff:") {
+    ip = ip.substr(7);
+  }
+  headerData.ipAddress = ip;
   headerData.language = req.acceptsLanguages()[ 0 ];
   var userAgent = req.get( 'user-agent' )
   //contents of first parentheses:
